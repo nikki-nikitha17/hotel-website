@@ -13,17 +13,19 @@ body {
  background: #1a1a1a;
  color: white;
  line-height: 1.6;
+ padding-top: 80px; /* Add padding to account for fixed header */
 }
 
 /* Header */
 .header {
- background: #222;
- padding: 1.5rem 2rem;
  position: fixed;
- width: 100%;
  top: 0;
+ left: 0;
+ right: 0;
  z-index: 1000;
- box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+ background-color: #1a1a1a;
+ padding: 1rem 0;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .nav-container {

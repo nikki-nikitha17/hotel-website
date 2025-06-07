@@ -216,37 +216,52 @@ function getTableNumberFromURL() {
 function initializePage() {
  const tableNumber = getTableNumberFromURL();
  if (tableNumber) {
- // Store the table number in sessionStorage
- sessionStorage.setItem('selectedTable', tableNumber);
+ // Store the table number in localStorage (more persistent than sessionStorage)
+ localStorage.setItem('selectedTable', tableNumber);
+ 
+ // Update any table number displays immediately
+ const tableSelects = document.querySelectorAll('select#tableNumber');
+ tableSelects.forEach(select => {
+ select.value = tableNumber;
+ select.disabled = true;
+ });
  }
 }
 
 // Modify the checkout function
 function checkout() {
- if (cart.length === 0) {
- alert('Your cart is empty!');
- return;
- }
- closeCart();
- const checkoutModal = document.getElementById('checkoutModal');
- if (checkoutModal) {
- checkoutModal.style.display = 'block';
- // Reset payment form
- document.getElementById('upi-payment-details').style.display = 'none';
- document.getElementById('payment-status').style.display = 'none';
- document.querySelectorAll('.payment-btn').forEach(btn => btn.disabled = false);
- document.getElementById('paymentForm').reset();
- 
- // Set table number if it exists in URL
- const tableNumber = sessionStorage.getItem('selectedTable');
- if (tableNumber) {
- const tableSelect = document.getElementById('tableNumber');
- tableSelect.value = tableNumber;
- tableSelect.disabled = true; // Disable changing the table number
- }
- } else {
- console.error('checkoutModal element not found');
- }
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+    closeCart();
+    const checkoutModal = document.getElementById('checkoutModal');
+    if (checkoutModal) {
+        checkoutModal.style.display = 'block';
+        // Reset payment form
+        document.getElementById('upi-payment-details').style.display = 'none';
+        document.getElementById('payment-status').style.display = 'none';
+        document.querySelectorAll('.payment-btn').forEach(btn => btn.disabled = false);
+        document.getElementById('paymentForm').reset();
+        
+        // Set table number if it exists
+        const tableNumber = localStorage.getItem('selectedTable');
+        if (tableNumber) {
+            const tableSelect = document.getElementById('tableNumber');
+            if (tableSelect) {
+                tableSelect.value = tableNumber;
+                tableSelect.disabled = true; // Disable changing the table number
+                
+                // Hide the table number field since it's pre-selected
+                const tableNumberGroup = tableSelect.closest('.form-group');
+                if (tableNumberGroup) {
+                    tableNumberGroup.style.display = 'none';
+                }
+            }
+        }
+    } else {
+        console.error('checkoutModal element not found');
+    }
 }
 
 function closeCheckout() {
