@@ -206,7 +206,22 @@ function closeCart() {
  }
 }
 
-// Checkout Functions
+// Get table number from URL
+function getTableNumberFromURL() {
+ const urlParams = new URLSearchParams(window.location.search);
+ return urlParams.get('table');
+}
+
+// Initialize page with table number
+function initializePage() {
+ const tableNumber = getTableNumberFromURL();
+ if (tableNumber) {
+ // Store the table number in sessionStorage
+ sessionStorage.setItem('selectedTable', tableNumber);
+ }
+}
+
+// Modify the checkout function
 function checkout() {
  if (cart.length === 0) {
  alert('Your cart is empty!');
@@ -221,6 +236,14 @@ function checkout() {
  document.getElementById('payment-status').style.display = 'none';
  document.querySelectorAll('.payment-btn').forEach(btn => btn.disabled = false);
  document.getElementById('paymentForm').reset();
+ 
+ // Set table number if it exists in URL
+ const tableNumber = sessionStorage.getItem('selectedTable');
+ if (tableNumber) {
+ const tableSelect = document.getElementById('tableNumber');
+ tableSelect.value = tableNumber;
+ tableSelect.disabled = true; // Disable changing the table number
+ }
  } else {
  console.error('checkoutModal element not found');
  }
@@ -441,8 +464,11 @@ function updateOrderStatus(orderId, status) {
  }
 }
 
-// Initialize
-window.onload = initMenu;
+// Add event listener for page load
+document.addEventListener('DOMContentLoaded', function() {
+ initMenu();
+ initializePage();
+});
 
 // Close modals on outside click
 window.onclick = function(event) {
