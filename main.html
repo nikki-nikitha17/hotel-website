@@ -8,205 +8,201 @@
  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
- <!-- Header -->
- <header class="header">
- <div class="nav-container">
- <a href="#" class="logo">Quipsyy Foods</a>
- <nav>
- <ul class="nav-links">
- <li><a href="#home">Home</a></li>
- <li><a href="#menu">Menu</a></li>
- <li><a href="#contact">Contact</a></li>
- </ul>
- </nav>
- <div class="cart-admin">
- <button class="cart-btn" onclick="openCart()">
- <i class="fas fa-shopping-cart"></i>
- Cart
- <span class="cart-count" id="cartCount">0</span>
- </button>
- <button class="admin-btn" onclick="openAdminLogin()">
- <i class="fas fa-user-shield"></i>
- Admin
- </button>
- </div>
- </div>
- </header>
+ <div id="root">
+   <!-- Navigation -->
+   <div class="nav-container">
+     <a href="#" class="logo">Quipsyy Foods</a>
+     <ul class="nav-links">
+       <li><a href="#home">Home</a></li>
+       <li><a href="#menu">Menu</a></li>
+       <li><a href="#contact">Contact</a></li>
+     </ul>
+     <div class="cart-admin">
+       <button class="cart-btn" onclick="openCart()">
+         <i class="fas fa-shopping-cart"></i>
+         Cart
+         <span class="cart-count" id="cartCount">0</span>
+       </button>
+       <button class="admin-btn" onclick="openAdminLogin()">
+         <i class="fas fa-user-shield"></i>
+         Admin
+       </button>
+     </div>
+   </div>
 
- <!-- Hero Section -->
- <section id="home" class="hero">
- <div class="hero-content">
- <h1>Quipsyy Foods</h1>
- <p class="hero-subtitle">Take a bite, take a bite of life</p>
- <p class="hero-description">
- is a vibrant, modern restaurant blending bold Indian flavors with global inspirations. 
- Serving fresh, flavorful meals in a lively ambiance, it's perfect for casual dining, 
- family gatherings, and food lovers seeking adventure.
- </p>
- <a href="#menu" class="order-btn">Order Now</a>
- </div>
- </section>
+   <!-- Content -->
+   <div id="home" class="hero">
+     <div class="hero-content">
+       <h1>Quipsyy Foods</h1>
+       <p class="hero-subtitle">Take a bite, take a bite of life</p>
+       <p class="hero-description">
+         is a vibrant, modern restaurant blending bold Indian flavors with global inspirations. 
+         Serving fresh, flavorful meals in a lively ambiance, it's perfect for casual dining, 
+         family gatherings, and food lovers seeking adventure.
+       </p>
+       <a href="#menu" class="order-btn">Order Now</a>
+     </div>
+   </div>
 
- <!-- Menu Section -->
- <section id="menu" class="menu-section">
- <div class="container">
- <h2 class="section-title">Digital Menu</h2>
- <div id="menuCategories"></div>
- </div>
- </section>
+   <div id="menu" class="menu-section">
+     <div class="container">
+       <h2 class="section-title">Digital Menu</h2>
+       <div id="menuCategories"></div>
+     </div>
+   </div>
 
- <!-- Contact Section -->
- <footer id="contact" class="footer">
- <div class="footer-content">
- <h3>Contact Us</h3>
- <div class="contact-info">
- <div class="contact-item">
- <i class="fas fa-phone"></i>
- <span>+91 98765 43210</span>
- </div>
- <div class="contact-item">
- <i class="fas fa-envelope"></i>
- <span>info@quipsyyfoods.com</span>
- </div>
- <div class="contact-item">
- <i class="fas fa-map-marker-alt"></i>
- <span>123 Food Street, Hyderabad, Telangana</span>
- </div>
- </div>
- <p>© 2025 Quipsyy Foods. All rights reserved.</p>
- </div>
- </footer>
+   <footer id="contact" class="footer">
+     <div class="footer-content">
+       <h3>Contact Us</h3>
+       <div class="contact-info">
+         <div class="contact-item">
+           <i class="fas fa-phone"></i>
+           <span>+91 98765 43210</span>
+         </div>
+         <div class="contact-item">
+           <i class="fas fa-envelope"></i>
+           <span>info@quipsyyfoods.com</span>
+         </div>
+         <div class="contact-item">
+           <i class="fas fa-map-marker-alt"></i>
+           <span>123 Food Street, Hyderabad, Telangana</span>
+         </div>
+       </div>
+       <p>© 2025 Quipsyy Foods. All rights reserved.</p>
+     </div>
+   </footer>
 
- <!-- Cart Modal -->
- <div id="cartModal" class="modal">
- <div class="modal-content">
- <span class="close" onclick="closeCart()">×</span>
- <h2>Your Cart</h2>
- <div id="cartItems" class="cart-items"></div>
- <div id="cartTotal" class="cart-total">Total: ₹0.00</div>
- <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
- </div>
- </div>
+   <!-- Modals -->
+   <!-- Cart Modal -->
+   <div id="cartModal" class="modal">
+     <div class="modal-content">
+       <span class="close" onclick="closeCart()">×</span>
+       <h2>Your Cart</h2>
+       <div id="cartItems" class="cart-items"></div>
+       <div id="cartTotal" class="cart-total">Total: ₹0.00</div>
+       <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+     </div>
+   </div>
 
- <!-- Checkout Modal -->
- <div id="checkoutModal" class="modal">
- <div class="modal-content">
- <span class="close" onclick="closeCheckout()">×</span>
- <h2>Checkout</h2>
- <form id="paymentForm">
- <div class="form-group">
- <label for="customerName">Name</label>
- <input type="text" id="customerName" required>
- </div>
- <div class="form-group">
- <label for="customerPhone">Phone</label>
- <input type="tel" id="customerPhone" required>
- </div>
- <div class="form-group">
- <label for="customerEmail">Email</label>
- <input type="email" id="customerEmail" required>
- </div>
- <div class="form-group ">
- <label for="tableNumber">Table Number</label>
- <select id="tableNumber" required>
- <option value="">Select Table</option>
- <option value="1">Table 1</option>
- <option value="2">Table 2</option>
- <option value="3">Table 3</option>
- <option value="4">Table 4</option>
- <option value="5">Table 5</option>
- </select>
- </div>
- <div class="form-group">
- <label for="specialInstructions">Special Instructions</label>
- <textarea id="specialInstructions" rows="3"></textarea>
- </div>
- <div class="form-group">
- <label>Payment Method</label>
- <div class="payment-options">
- <button type="button" class="payment-btn" data-upi-app="phonepe" onclick="initiateUPIPayment('phonepe')">
- <i class="fas fa-mobile-alt"></i> Pay with PhonePe
- </button>
- <button type="button" class="payment-btn" data-upi-app="gpay" onclick="initiateUPIPayment('gpay')">
- <i class="fas fa-google"></i> Pay with Google Pay
- </button>
- <button type="button" class="payment-btn" data-upi-app="other" onclick="initiateUPIPayment('other')">
- <i class="fas fa-credit-card"></i> Other UPI Apps
- </button>
- </div>
- </div>
- <div id="upi-payment-details" style="display: none;">
- <p>Please complete the payment in your UPI app and enter the UTR number below.</p>
- <div class="form-group">
- <label for="utrNumber">UTR Number (12 digits)</label>
- <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" required>
- </div>
- <button type="submit" class="checkout-btn">Submit Payment</button>
- </div>
- <div id="payment-status" style="display: none; text-align: center;"></div>
- </form>
- </div>
- </div>
+   <!-- Checkout Modal -->
+   <div id="checkoutModal" class="modal">
+     <div class="modal-content">
+       <span class="close" onclick="closeCheckout()">×</span>
+       <h2>Checkout</h2>
+       <form id="paymentForm">
+         <div class="form-group">
+           <label for="customerName">Name</label>
+           <input type="text" id="customerName" required>
+         </div>
+         <div class="form-group">
+           <label for="customerPhone">Phone</label>
+           <input type="tel" id="customerPhone" required>
+         </div>
+         <div class="form-group">
+           <label for="customerEmail">Email</label>
+           <input type="email" id="customerEmail" required>
+         </div>
+         <div class="form-group ">
+           <label for="tableNumber">Table Number</label>
+           <select id="tableNumber" required>
+             <option value="">Select Table</option>
+             <option value="1">Table 1</option>
+             <option value="2">Table 2</option>
+             <option value="3">Table 3</option>
+             <option value="4">Table 4</option>
+             <option value="5">Table 5</option>
+           </select>
+         </div>
+         <div class="form-group">
+           <label for="specialInstructions">Special Instructions</label>
+           <textarea id="specialInstructions" rows="3"></textarea>
+         </div>
+         <div class="form-group">
+           <label>Payment Method</label>
+           <div class="payment-options">
+             <button type="button" class="payment-btn" data-upi-app="phonepe" onclick="initiateUPIPayment('phonepe')">
+               <i class="fas fa-mobile-alt"></i> Pay with PhonePe
+             </button>
+             <button type="button" class="payment-btn" data-upi-app="gpay" onclick="initiateUPIPayment('gpay')">
+               <i class="fas fa-google"></i> Pay with Google Pay
+             </button>
+             <button type="button" class="payment-btn" data-upi-app="other" onclick="initiateUPIPayment('other')">
+               <i class="fas fa-credit-card"></i> Other UPI Apps
+             </button>
+           </div>
+         </div>
+         <div id="upi-payment-details" style="display: none;">
+           <p>Please complete the payment in your UPI app and enter the UTR number below.</p>
+           <div class="form-group">
+             <label for="utrNumber">UTR Number (12 digits)</label>
+             <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" required>
+           </div>
+           <button type="submit" class="checkout-btn">Submit Payment</button>
+         </div>
+         <div id="payment-status" style="display: none; text-align: center;"></div>
+       </form>
+     </div>
+   </div>
 
- <!-- Order Status Modal -->
- <div id="orderStatusModal" class="modal">
- <div class="modal-content">
- <span class="close" onclick="closeOrderStatus()">×</span>
- <div class="order-status">
- <div class="status-icon">
- <i class="fas fa-check-circle"></i>
- </div>
- <h2>Order Placed Successfully!</h2>
- <p>Order ID: <span id="orderId"></span></p>
- <p>Estimated time: <span id="estimatedTime">20-25 minutes</span></p>
- <p>Status: <span id="currentStatus">Pending Payment</span></p>
- <h3>Rate Your Experience</h3>
- <div class="rating" id="orderRating">
- <span class="star" data-rating="1">★</span>
- <span class="star" data-rating="2">★</span>
- <span class="star" data-rating="3">★</span>
- <span class="star" data-rating="4">★</span>
- <span class="star" data-rating="5">★</span>
- </div>
- <div class="form-group">
- <label for="feedback">Feedback:</label>
- <textarea id="feedback" rows="3" placeholder="Tell us about your experience..."></textarea>
- </div>
- <button class="checkout-btn" onclick="submitFeedback()">Submit Feedback</button>
- </div>
- </div>
- </div>
+   <!-- Order Status Modal -->
+   <div id="orderStatusModal" class="modal">
+     <div class="modal-content">
+       <span class="close" onclick="closeOrderStatus()">×</span>
+       <div class="order-status">
+         <div class="status-icon">
+           <i class="fas fa-check-circle"></i>
+         </div>
+         <h2>Order Placed Successfully!</h2>
+         <p>Order ID: <span id="orderId"></span></p>
+         <p>Estimated time: <span id="estimatedTime">20-25 minutes</span></p>
+         <p>Status: <span id="currentStatus">Pending Payment</span></p>
+         <h3>Rate Your Experience</h3>
+         <div class="rating" id="orderRating">
+           <span class="star" data-rating="1">★</span>
+           <span class="star" data-rating="2">★</span>
+           <span class="star" data-rating="3">★</span>
+           <span class="star" data-rating="4">★</span>
+           <span class="star" data-rating="5">★</span>
+         </div>
+         <div class="form-group">
+           <label for="feedback">Feedback:</label>
+           <textarea id="feedback" rows="3" placeholder="Tell us about your experience..."></textarea>
+         </div>
+         <button class="checkout-btn" onclick="submitFeedback()">Submit Feedback</button>
+       </div>
+     </div>
+   </div>
 
- <!-- Admin Login Modal -->
- <div id="adminLoginModal" class="modal">
- <div class="modal-content">
- <span class="close" onclick="closeAdminLogin()">×</span>
- <h2>Admin Login</h2>
- <form id="adminLoginForm">
- <div class="form-group">
- <label for="adminUsername">Username:</label>
- <input type="text" id="adminUsername" required>
- </div>
- <div class="form-group">
- <label for="adminPassword">Password:</label>
- <input type="password" id="adminPassword" required>
- </div>
- <button type="submit" class="checkout-btn">Login</button>
- </form>
- </div>
- </div>
+   <!-- Admin Login Modal -->
+   <div id="adminLoginModal" class="modal">
+     <div class="modal-content">
+       <span class="close" onclick="closeAdminLogin()">×</span>
+       <h2>Admin Login</h2>
+       <form id="adminLoginForm">
+         <div class="form-group">
+           <label for="adminUsername">Username:</label>
+           <input type="text" id="adminUsername" required>
+         </div>
+         <div class="form-group">
+           <label for="adminPassword">Password:</label>
+           <input type="password" id="adminPassword" required>
+         </div>
+         <button type="submit" class="checkout-btn">Login</button>
+       </form>
+     </div>
+   </div>
 
- <!-- Admin Panel Modal -->
- <div id="adminPanelModal" class="modal">
- <div class="modal-content">
- <span class="close" onclick="closeAdminPanel()">×</span>
- <div class="admin-panel">
- <h2>Admin Panel - Order Management</h2>
- <div id="ordersList" class="orders-list"></div>
+   <!-- Admin Panel Modal -->
+   <div id="adminPanelModal" class="modal">
+     <div class="modal-content">
+       <span class="close" onclick="closeAdminPanel()">×</span>
+       <div class="admin-panel">
+         <h2>Admin Panel - Order Management</h2>
+         <div id="ordersList" class="orders-list"></div>
+       </div>
+     </div>
+   </div>
  </div>
- </div>
- </div>
-
  <script src="script.js"></script>
 </body>
 </html>
