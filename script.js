@@ -581,18 +581,70 @@ function submitFeedback() {
 }
 
 // Admin Functions
-document.getElementById('adminLoginForm')?.addEventListener('submit', function(e) {
- e.preventDefault();
- 
- const username = document.getElementById('adminUsername')?.value || '';
- const password = document.getElementById('adminPassword')?.value || '';
- 
- if (username === 'admin' && password === 'password123') {
- closeAdminLogin();
- openAdminPanel();
- } else {
- alert('Invalid credentials');
- }
+function closeAdminLogin() {
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    if (adminLoginModal) {
+        adminLoginModal.classList.remove('show');
+        const form = document.getElementById('adminLoginForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+function closeAdminPanel() {
+    const adminPanelModal = document.getElementById('adminPanelModal');
+    if (adminPanelModal) {
+        adminPanelModal.classList.remove('show');
+    }
+}
+
+// Add event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+
+    // Admin login form handler
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    if (adminLoginForm) {
+        adminLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername')?.value || '';
+            const password = document.getElementById('adminPassword')?.value || '';
+            
+            if (username === 'admin' && password === 'password123') {
+                closeAdminLogin();
+                openAdminPanel();
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+    }
+
+    // Rating stars handler
+    const orderRating = document.getElementById('orderRating');
+    if (orderRating) {
+        const stars = orderRating.querySelectorAll('.star');
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                currentRating = rating;
+                updateRatingStars();
+            });
+
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                stars.forEach(s => {
+                    const r = parseInt(s.getAttribute('data-rating'));
+                    s.classList.toggle('active', r <= rating);
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                updateRatingStars();
+            });
+        });
+    }
 });
 
 function updateAdminPanel() {

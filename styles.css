@@ -807,3 +807,23 @@ main {
         padding-bottom: 4rem;
     }
 }
+
+/* Rating System Styles */
+.rating {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.star {
+    font-size: 2rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.star:hover,
+.star.active {
+    color: #f39c12;
+}
