@@ -154,13 +154,13 @@
          </div>
          <div class="form-group">
            <label for="customerPhone">Phone</label>
-           <input type="tel" id="customerPhone" required>
+           <input type="tel" id="customerPhone" pattern="[0-9]{10}" maxlength="10" required>
          </div>
          <div class="form-group">
            <label for="customerEmail">Email</label>
            <input type="email" id="customerEmail" required>
          </div>
-         <div class="form-group ">
+         <div class="form-group">
            <label for="tableNumber">Table Number</label>
            <select id="tableNumber" required>
              <option value="">Select Table</option>
@@ -172,8 +172,8 @@
            </select>
          </div>
          <div class="form-group">
-           <label for="specialInstructions">Special Instructions</label>
-           <textarea id="specialInstructions" rows="3"></textarea>
+           <label for="specialInstructions">Special Instructions (Optional)</label>
+           <textarea id="specialInstructions" rows="2"></textarea>
          </div>
          <div class="form-group">
            <label>Payment Method</label>
@@ -193,11 +193,11 @@
            <p>Please complete the payment in your UPI app and enter the UTR number below.</p>
            <div class="form-group">
              <label for="utrNumber">UTR Number (12 digits)</label>
-             <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" required>
+             <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" maxlength="12" inputmode="numeric" required>
            </div>
            <button type="submit" class="checkout-btn">Submit Payment</button>
          </div>
-         <div id="payment-status" style="display: none; text-align: center;"></div>
+         <div id="payment-status" style="display: none;"></div>
        </form>
      </div>
    </div>
