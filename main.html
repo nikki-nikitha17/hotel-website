@@ -145,24 +145,24 @@
    <!-- Checkout Modal -->
    <div id="checkoutModal" class="modal">
      <div class="modal-content">
-       <span class="close" onclick="closeCheckout()">×</span>
+       <button type="button" class="close" onclick="closeCheckout()" aria-label="Close">×</button>
        <h2>Checkout</h2>
-       <form id="paymentForm">
+       <form id="paymentForm" autocomplete="on">
          <div class="form-group">
            <label for="customerName">Name</label>
-           <input type="text" id="customerName" required>
+           <input type="text" id="customerName" name="customerName" autocomplete="name" required>
          </div>
          <div class="form-group">
            <label for="customerPhone">Phone</label>
-           <input type="tel" id="customerPhone" pattern="[0-9]{10}" maxlength="10" required>
+           <input type="tel" id="customerPhone" name="customerPhone" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" inputmode="numeric" required>
          </div>
          <div class="form-group">
            <label for="customerEmail">Email</label>
-           <input type="email" id="customerEmail" required>
+           <input type="email" id="customerEmail" name="customerEmail" autocomplete="email" required>
          </div>
          <div class="form-group">
            <label for="tableNumber">Table Number</label>
-           <select id="tableNumber" required>
+           <select id="tableNumber" name="tableNumber" required>
              <option value="">Select Table</option>
              <option value="1">Table 1</option>
              <option value="2">Table 2</option>
@@ -173,7 +173,7 @@
          </div>
          <div class="form-group">
            <label for="specialInstructions">Special Instructions (Optional)</label>
-           <textarea id="specialInstructions" rows="2"></textarea>
+           <textarea id="specialInstructions" name="specialInstructions" rows="2"></textarea>
          </div>
          <div class="form-group">
            <label>Payment Method</label>
@@ -193,7 +193,7 @@
            <p>Please complete the payment in your UPI app and enter the UTR number below.</p>
            <div class="form-group">
              <label for="utrNumber">UTR Number (12 digits)</label>
-             <input type="text" id="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" maxlength="12" inputmode="numeric" required>
+             <input type="text" id="utrNumber" name="utrNumber" placeholder="Enter 12-digit UTR" pattern="[0-9]{12}" maxlength="12" inputmode="numeric" required>
            </div>
            <button type="submit" class="checkout-btn">Submit Payment</button>
          </div>
