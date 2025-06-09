@@ -58,78 +58,199 @@ let currentRating = 0;
 const UPI_ID = 'restaurant@upi'; // Replace with your actual UPI ID (e.g., yourname@upi)
 const MERCHANT_NAME = 'Quipsyy Foods';
 
+// Get table number from URL
+function getTableNumberFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('table');
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize carousel
+    const carousel = document.querySelector('.carousel-container');
+    if (carousel) {
+        const track = carousel.querySelector('.carousel-track');
+        const slides = Array.from(track.children);
+        const nextButton = carousel.querySelector('.carousel-button.next');
+        const prevButton = carousel.querySelector('.carousel-button.prev');
+        const dotsContainer = carousel.querySelector('.carousel-dots');
+        
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.classList.add('carousel-dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+        
+        const dots = Array.from(dotsContainer.children);
+        let currentSlide = 0;
+        let intervalId = null;
+        
+        // Initialize first slide
+        slides[0].classList.add('active');
+        
+        // Event listeners
+        nextButton.addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
+        });
+        
+        prevButton.addEventListener('click', () => {
+            prevSlide();
+            resetInterval();
+        });
+        
+        // Auto-advance slides
+        function startAutoSlide() {
+            intervalId = setInterval(nextSlide, 5000);
+        }
+        
+        function resetInterval() {
+            clearInterval(intervalId);
+            startAutoSlide();
+        }
+        
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            slides[index].classList.add('active');
+            currentSlide = index;
+            updateDots();
+        }
+        
+        function nextSlide() {
+            const next = (currentSlide + 1) % slides.length;
+            goToSlide(next);
+        }
+        
+        function prevSlide() {
+            const prev = (currentSlide - 1 + slides.length) % slides.length;
+            goToSlide(prev);
+        }
+        
+        // Start auto-sliding
+        startAutoSlide();
+        
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        carousel.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        carousel.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchEndX - touchStartX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    prevSlide();
+                } else {
+                    nextSlide();
+                }
+                resetInterval();
+            }
+        }
+    }
+
+    // Check if we're on the main menu page
+    if (window.location.pathname.includes('main.html')) {
+        const tableNumber = localStorage.getItem('selectedTable');
+        if (!tableNumber) {
+            // No table number found, redirect to table selection
+            window.location.href = 'index.html';
+            return;
+        }
+        // Initialize menu if we have a valid table
+        initMenu();
+    }
+});
+
 // Initialize Menu
 function initMenu() {
- const menuCategories = document.getElementById('menuCategories');
- if (!menuCategories) {
- console.error('menuCategories element not found');
- return;
- }
- menuCategories.innerHTML = '';
- 
- Object.keys(menuData).forEach(category => {
- const categoryDiv = document.createElement('div');
- categoryDiv.classList.add('category');
- const categoryTitle = document.createElement('h3');
- categoryTitle.classList.add('category-title');
- categoryTitle.textContent = category.charAt(0).toUpperCase() + category.replace('-', ' ').slice(1);
- categoryDiv.appendChild(categoryTitle);
- 
- const menuItems = document.createElement('div');
- menuItems.classList.add('menu-items');
- menuData[category].forEach(item => {
- const menuItem = document.createElement('div');
- menuItem.classList.add('menu-item');
- const imageSrc = item.image || 'images/fallback.jpg';
- menuItem.innerHTML = `
- <div class="item-image">
- <img src="${imageSrc}" alt="${item.name}" loading="lazy" onerror="this.src='images/fallback.jpg'; console.warn('Image failed to load: ${imageSrc}')">
- </div>
- <div class="item-content">
- <h3 class="item-name">${item.name}</h3>
- <p class="item-description">${item.description}</p>
- <div class="item-footer">
- <span class="item-price">₹${item.price.toFixed(2)}</span>
- <button class="add-to-cart" data-item-id="${item.id}" onclick="addToCart(${item.id}, this)">Add to Cart</button>
- </div>
- </div>
- `;
- menuItems.appendChild(menuItem);
- });
- 
- categoryDiv.appendChild(menuItems);
- menuCategories.appendChild(categoryDiv);
- });
+    const menuCategories = document.getElementById('menuCategories');
+    if (!menuCategories) {
+        console.error('menuCategories element not found');
+        return;
+    }
+    menuCategories.innerHTML = '';
+    
+    Object.keys(menuData).forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('category');
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.classList.add('category-title');
+        categoryTitle.textContent = category.charAt(0).toUpperCase() + category.replace('-', ' ').slice(1);
+        categoryDiv.appendChild(categoryTitle);
+        
+        const menuItems = document.createElement('div');
+        menuItems.classList.add('menu-items');
+        menuData[category].forEach(item => {
+            const menuItem = document.createElement('div');
+            menuItem.classList.add('menu-item');
+            const imageSrc = item.image || 'images/fallback.jpg';
+            menuItem.innerHTML = `
+                <div class="item-image">
+                    <img src="${imageSrc}" alt="${item.name}" loading="lazy" onerror="this.src='images/fallback.jpg'">
+                </div>
+                <div class="item-content">
+                    <h3 class="item-name">${item.name}</h3>
+                    <p class="item-description">${item.description}</p>
+                    <div class="item-footer">
+                        <span class="item-price">₹${item.price.toFixed(2)}</span>
+                        <button class="add-to-cart" onclick="addToCart(${item.id}, this)" data-item-id="${item.id}">Add</button>
+                    </div>
+                </div>
+            `;
+            menuItems.appendChild(menuItem);
+        });
+        
+        categoryDiv.appendChild(menuItems);
+        menuCategories.appendChild(categoryDiv);
+    });
+    
+    updateMenuItems();
 }
 
 // Cart Functions
 function addToCart(itemId, button) {
- const item = Object.values(menuData).flat().find(i => i.id === itemId);
- if (!item) {
- console.error(`Item with ID ${itemId} not found`);
- return;
- }
- const cartItem = cart.find(ci => ci.id === itemId);
- 
- if (cartItem) {
- cartItem.quantity++;
- } else {
- cart.push({ ...item, quantity: 1 });
- }
- 
- // Update button text to "Added"
- button.textContent = 'Added';
- button.disabled = true;
- button.classList.add('added');
- 
- // Revert button text after 5 seconds
- setTimeout(() => {
- button.textContent = 'Add to Cart';
- button.disabled = false;
- button.classList.remove('added');
- }, 5000);
- 
- updateCart();
+    const item = Object.values(menuData).flat().find(i => i.id === itemId);
+    if (!item) {
+        console.error(`Item with ID ${itemId} not found`);
+        return;
+    }
+    
+    const cartItem = cart.find(ci => ci.id === itemId);
+    if (cartItem) {
+        cartItem.quantity++;
+    } else {
+        cart.push({ ...item, quantity: 1 });
+    }
+    
+    button.textContent = 'Added';
+    button.disabled = true;
+    button.classList.add('added');
+    
+    setTimeout(() => {
+        button.textContent = 'Add';
+        button.disabled = false;
+        button.classList.remove('added');
+    }, 2000);
+    
+    updateCart();
 }
 
 function updateCart() {
@@ -190,89 +311,118 @@ function removeFromCart(itemId) {
  updateCart();
 }
 
+// Modal Functions
 function openCart() {
- const cartModal = document.getElementById('cartModal');
- if (cartModal) {
- cartModal.style.display = 'block';
- } else {
- console.error('cartModal element not found');
- }
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.classList.add('show');
+    }
 }
 
 function closeCart() {
- const cartModal = document.getElementById('cartModal');
- if (cartModal) {
- cartModal.style.display = 'none';
- }
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.classList.remove('show');
+    }
 }
 
-// Get table number from URL
-function getTableNumberFromURL() {
- const urlParams = new URLSearchParams(window.location.search);
- return urlParams.get('table');
-}
-
-// Initialize page with table number
-function initializePage() {
- const tableNumber = getTableNumberFromURL();
- if (tableNumber) {
- // Store the table number in localStorage (more persistent than sessionStorage)
- localStorage.setItem('selectedTable', tableNumber);
- 
- // Update any table number displays immediately
- const tableSelects = document.querySelectorAll('select#tableNumber');
- tableSelects.forEach(select => {
- select.value = tableNumber;
- select.disabled = true;
- });
- }
-}
-
-// Modify the checkout function
 function checkout() {
     if (cart.length === 0) {
         alert('Your cart is empty!');
         return;
     }
     closeCart();
+    
     const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
-        checkoutModal.style.display = 'block';
+        checkoutModal.classList.add('show');
+        
         // Reset payment form
         document.getElementById('upi-payment-details').style.display = 'none';
         document.getElementById('payment-status').style.display = 'none';
         document.querySelectorAll('.payment-btn').forEach(btn => btn.disabled = false);
-        document.getElementById('paymentForm').reset();
         
-        // Set table number if it exists
+        // Get table number from localStorage
         const tableNumber = localStorage.getItem('selectedTable');
-        if (tableNumber) {
-            const tableSelect = document.getElementById('tableNumber');
-            if (tableSelect) {
-                tableSelect.value = tableNumber;
-                tableSelect.disabled = true; // Disable changing the table number
-                
-                // Hide the table number field since it's pre-selected
-                const tableNumberGroup = tableSelect.closest('.form-group');
-                if (tableNumberGroup) {
-                    tableNumberGroup.style.display = 'none';
-                }
-            }
+        const tableFormGroup = document.querySelector('.form-group:has(#tableNumber)');
+        const tableSelect = document.getElementById('tableNumber');
+        
+        if (tableNumber && tableFormGroup && tableSelect) {
+            tableSelect.value = tableNumber;
+            tableFormGroup.style.display = 'none';
         }
-    } else {
-        console.error('checkoutModal element not found');
+        
+        // Reset other form fields
+        document.getElementById('customerName').value = '';
+        document.getElementById('customerPhone').value = '';
+        document.getElementById('customerEmail').value = '';
+        document.getElementById('specialInstructions').value = '';
     }
 }
 
 function closeCheckout() {
- const checkoutModal = document.getElementById('checkoutModal');
- if (checkoutModal) {
- checkoutModal.style.display = 'none';
- document.getElementById('paymentForm').reset();
- document.getElementById('upi-payment-details').style.display = 'none';
- document.getElementById('payment-status').style.display = 'none';
- }
+    const checkoutModal = document.getElementById('checkoutModal');
+    if (checkoutModal) {
+        checkoutModal.classList.remove('show');
+        document.getElementById('paymentForm').reset();
+        document.getElementById('upi-payment-details').style.display = 'none';
+        document.getElementById('payment-status').style.display = 'none';
+    }
 }
+
+function openOrderStatus() {
+    const orderStatusModal = document.getElementById('orderStatusModal');
+    if (orderStatusModal) {
+        orderStatusModal.classList.add('show');
+    }
+}
+
+function closeOrderStatus() {
+    const orderStatusModal = document.getElementById('orderStatusModal');
+    if (orderStatusModal) {
+        orderStatusModal.classList.remove('show');
+        const feedback = document.getElementById('feedback');
+        if (feedback) feedback.value = '';
+        currentRating = 0;
+        updateRatingStars();
+    }
+}
+
+function openAdminLogin() {
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    if (adminLoginModal) {
+        adminLoginModal.classList.add('show');
+    }
+}
+
+function closeAdminLogin() {
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    if (adminLoginModal) {
+        adminLoginModal.classList.remove('show');
+    }
+}
+
+function openAdminPanel() {
+    const adminPanelModal = document.getElementById('adminPanelModal');
+    if (adminPanelModal) {
+        adminPanelModal.classList.add('show');
+        updateAdminPanel();
+    }
+}
+
+function closeAdminPanel() {
+    const adminPanelModal = document.getElementById('adminPanelModal');
+    if (adminPanelModal) {
+        adminPanelModal.classList.remove('show');
+    }
+}
+
+// Close modals on outside click
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('show');
+    }
+};
 
 function initiateUPIPayment(app) {
  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -298,65 +448,82 @@ function initiateUPIPayment(app) {
 }
 
 document.getElementById('paymentForm')?.addEventListener('submit', function(e) {
- e.preventDefault();
+    e.preventDefault();
 
- const utrNumber = document.getElementById('utrNumber').value;
- if (!/^[0-9]{12}$/.test(utrNumber)) {
- const paymentStatus = document.getElementById('payment-status');
- paymentStatus.style.display = 'block';
- paymentStatus.classList.add('error');
- paymentStatus.textContent = 'Please enter a valid 12-digit UTR number.';
- return;
- }
+    const utrNumber = document.getElementById('utrNumber').value;
+    if (!/^[0-9]{12}$/.test(utrNumber)) {
+        const paymentStatus = document.getElementById('payment-status');
+        paymentStatus.style.display = 'block';
+        paymentStatus.classList.add('error');
+        paymentStatus.textContent = 'Please enter a valid 12-digit UTR number.';
+        return;
+    }
 
- const order = {
- id: Math.floor(Math.random() * 1000000),
- items: [...cart],
- customer: {
- name: document.getElementById('customerName').value || '',
- phone: document.getElementById('customerPhone').value || '',
- email: document.getElementById('customerEmail').value || '',
- tableNumber: document.getElementById('tableNumber').value || '',
- specialInstructions: document.getElementById('specialInstructions').value || ''
- },
- status: 'Pending Payment',
- time: new Date().toLocaleString(),
- rating: 0,
- feedback: '',
- utr: utrNumber,
- total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
- };
+    const order = {
+        id: Math.floor(Math.random() * 1000000),
+        items: [...cart],
+        customer: {
+            name: document.getElementById('customerName').value || '',
+            phone: document.getElementById('customerPhone').value || '',
+            email: document.getElementById('customerEmail').value || '',
+            tableNumber: document.getElementById('tableNumber').value || '',
+            specialInstructions: document.getElementById('specialInstructions').value || ''
+        },
+        status: 'Pending Payment',
+        time: new Date().toLocaleString(),
+        rating: 0,
+        feedback: '',
+        utr: utrNumber,
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    };
 
- orders.push(order);
- cart = [];
- updateCart();
- closeCheckout();
+    orders.push(order);
+    cart = [];
+    updateCart();
+    closeCheckout();
 
- const orderStatusModal = document.getElementById('orderStatusModal');
- if (orderStatusModal) {
- document.getElementById('orderId').textContent = order.id;
- document.getElementById('currentStatus').textContent = order.status;
- orderStatusModal.style.display = 'block';
- const paymentStatus = document.getElementById('payment-status');
- paymentStatus.style.display = 'block';
- paymentStatus.classList.remove('error');
- paymentStatus.textContent = 'Order placed. Awaiting payment verification.';
- } else {
- console.error('orderStatusModal element not found');
- }
+    const orderStatusModal = document.getElementById('orderStatusModal');
+    if (orderStatusModal) {
+        document.getElementById('orderId').textContent = order.id;
+        document.getElementById('currentStatus').textContent = order.status;
+        orderStatusModal.classList.add('show');
+    }
 });
 
-// Order Status
-function closeOrderStatus() {
- const orderStatusModal = document.getElementById('orderStatusModal');
- if (orderStatusModal) {
- orderStatusModal.style.display = 'none';
- const feedback = document.getElementById('feedback');
- if (feedback) feedback.value = '';
- currentRating = 0;
- updateRatingStars();
- }
-}
+// Add event listeners for all close buttons
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for all close buttons in modals
+    const closeButtons = document.querySelectorAll('.modal .close');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.classList.remove('show');
+                // Reset form if it's a modal with a form
+                const form = modal.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+                // Reset feedback if it's the order status modal
+                if (modal.id === 'orderStatusModal') {
+                    const feedback = document.getElementById('feedback');
+                    if (feedback) feedback.value = '';
+                    currentRating = 0;
+                    updateRatingStars();
+                }
+            }
+        });
+    });
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.remove('show');
+            }
+        });
+    });
+});
 
 // Rating System
 document.querySelectorAll('#orderRating .star').forEach(star => {
@@ -385,22 +552,6 @@ function submitFeedback() {
 }
 
 // Admin Functions
-function openAdminLogin() {
- const adminLoginModal = document.getElementById('adminLoginModal');
- if (adminLoginModal) {
- adminLoginModal.style.display = 'block';
- } else {
- console.error('adminLoginModal element not found');
- }
-}
-
-function closeAdminLogin() {
- const adminLoginModal = document.getElementById('adminLoginModal');
- if (adminLoginModal) {
- adminLoginModal.style.display = 'none';
- }
-}
-
 document.getElementById('adminLoginForm')?.addEventListener('submit', function(e) {
  e.preventDefault();
  
@@ -414,23 +565,6 @@ document.getElementById('adminLoginForm')?.addEventListener('submit', function(e
  alert('Invalid credentials');
  }
 });
-
-function openAdminPanel() {
- const adminPanelModal = document.getElementById('adminPanelModal');
- if (adminPanelModal) {
- adminPanelModal.style.display = 'block';
- updateAdminPanel();
- } else {
- console.error('adminPanelModal element not found');
- }
-}
-
-function closeAdminPanel() {
- const adminPanelModal = document.getElementById('adminPanelModal');
- if (adminPanelModal) {
- adminPanelModal.style.display = 'none';
- }
-}
 
 function updateAdminPanel() {
  const ordersList = document.getElementById('ordersList');
@@ -478,20 +612,3 @@ function updateOrderStatus(orderId, status) {
  }
  }
 }
-
-// Add event listener for page load
-document.addEventListener('DOMContentLoaded', function() {
- initMenu();
- initializePage();
-});
-
-// Close modals on outside click
-window.onclick = function(event) {
- if (event.target.classList.contains('modal')) {
- closeCart();
- closeCheckout();
- closeOrderStatus();
- closeAdminLogin();
- closeAdminPanel();
- }
-};

@@ -9,36 +9,94 @@
 </head>
 <body>
  <div id="root">
-   <!-- Navigation -->
-   <div class="nav-container">
-     <a href="#" class="logo">Quipsyy Foods</a>
+   <!-- Fixed Navigation -->
+   <nav class="nav-container">
+     <a href="#" class="logo">Quipsyy<br>Foods</a>
      <ul class="nav-links">
-       <li><a href="#home">Home</a></li>
-       <li><a href="#menu">Menu</a></li>
-       <li><a href="#contact">Contact</a></li>
+       <li>
+         <a href="#home" class="nav-item">
+           <i class="fas fa-home"></i>
+           <span>Home</span>
+         </a>
+       </li>
+       <li>
+         <a href="#menu" class="nav-item">
+           <i class="fas fa-utensils"></i>
+           <span>Menu</span>
+         </a>
+       </li>
+       <li>
+         <a href="#contact" class="nav-item">
+           <i class="fas fa-envelope"></i>
+           <span>Contact</span>
+         </a>
+       </li>
      </ul>
      <div class="cart-admin">
        <button class="cart-btn" onclick="openCart()">
-         <i class="fas fa-shopping-cart"></i>
-         Cart
-         <span class="cart-count" id="cartCount">0</span>
+         <i class="fas fa-shopping-cart">
+           <span class="cart-count" id="cartCount">0</span>
+         </i>
+         <span>Cart</span>
        </button>
        <button class="admin-btn" onclick="openAdminLogin()">
-         <i class="fas fa-user-shield"></i>
-         Admin
+         <i class="fas fa-user"></i>
+         <span>Admin</span>
        </button>
      </div>
-   </div>
+   </nav>
 
    <!-- Content -->
    <div id="home" class="hero">
      <div class="hero-content">
        <h1>Quipsyy Foods</h1>
-       <p class="hero-subtitle">Take a bite, take a bite of life</p>
+       <p class="hero-subtitle">Taste the Extraordinary</p>
+       <div class="carousel-container">
+         <div class="carousel-track">
+           <div class="carousel-slide active">
+             <img src="images/slide1.png" alt="Special Bowl Combo">
+             <div class="slide-content">
+               <h2>Super Bowl Combo</h2>
+               <p>Experience our signature noodle bowls with a perfect blend of flavors</p>
+             </div>
+           </div>
+           <div class="carousel-slide">
+             <img src="images/slide2.png" alt="Indian Fusion">
+             <div class="slide-content">
+               <h2>Indian Fusion Delights</h2>
+               <p>Where traditional meets modern in every bite</p>
+             </div>
+           </div>
+           <div class="carousel-slide">
+             <img src="images/slide3.png" alt="Chef's Special">
+             <div class="slide-content">
+               <h2>Chef's Special</h2>
+               <p>Daily curated dishes that will surprise your taste buds</p>
+             </div>
+           </div>
+           <div class="carousel-slide">
+             <img src="images/slide4.png" alt="Dessert Paradise">
+             <div class="slide-content">
+               <h2>Sweet Endings</h2>
+               <p>Indulge in our heavenly dessert collection</p>
+             </div>
+           </div>
+           <div class="carousel-slide">
+             <img src="images/slide5.png" alt="Beverage Collection">
+             <div class="slide-content">
+               <h2>Refreshing Beverages</h2>
+               <p>Complete your meal with our signature drinks</p>
+             </div>
+           </div>
+         </div>
+         <button class="carousel-button prev" aria-label="Previous slide">❮</button>
+         <button class="carousel-button next" aria-label="Next slide">❯</button>
+         <div class="carousel-dots"></div>
+       </div>
        <p class="hero-description">
-         is a vibrant, modern restaurant blending bold Indian flavors with global inspirations. 
-         Serving fresh, flavorful meals in a lively ambiance, it's perfect for casual dining, 
-         family gatherings, and food lovers seeking adventure.
+         Welcome to Quipsyy Foods, where we blend bold Indian flavors with global inspirations. 
+         Our vibrant, modern restaurant serves fresh, flavorful meals in a lively ambiance - 
+         perfect for casual dining, family gatherings, and food lovers seeking adventure.
        </p>
        <a href="#menu" class="order-btn">Order Now</a>
      </div>
@@ -147,7 +205,7 @@
    <!-- Order Status Modal -->
    <div id="orderStatusModal" class="modal">
      <div class="modal-content">
-       <span class="close" onclick="closeOrderStatus()">×</span>
+       <button type="button" class="close" aria-label="Close">×</button>
        <div class="order-status">
          <div class="status-icon">
            <i class="fas fa-check-circle"></i>

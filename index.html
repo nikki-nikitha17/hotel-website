@@ -3,17 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quipsyy Foods</title>
-    <script>
-        // Check if we're on the QR codes page
-        if (window.location.pathname.includes('qr-codes')) {
-            window.location.href = 'qr-codes.html';
-        } else {
-            window.location.href = 'main.html';
+    <title>Welcome to Quipsyy Foods</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .table-selection {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/restaurant-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: 20px;
         }
-    </script>
+        .welcome-text {
+            color: #f39c12;
+            margin-bottom: 2rem;
+        }
+        .table-form {
+            background: rgba(44, 44, 44, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+        }
+        .table-form h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        .table-form select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #333;
+            color: white;
+            font-size: 1rem;
+        }
+        .proceed-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .proceed-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <div class="table-selection">
+        <div class="welcome-text">
+            <h1>Welcome to Quipsyy Foods</h1>
+            <p>Please select your table number to proceed</p>
+        </div>
+        <div class="table-form">
+            <h2>Select Your Table</h2>
+            <select id="tableSelect">
+                <option value="">Choose a table</option>
+                <option value="1">Table 1</option>
+                <option value="2">Table 2</option>
+                <option value="3">Table 3</option>
+                <option value="4">Table 4</option>
+                <option value="5">Table 5</option>
+            </select>
+            <button class="proceed-btn" onclick="proceedToMenu()">Proceed to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        // Check if table number is already in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tableFromURL = urlParams.get('table');
+        
+        // Function to proceed to menu
+        function proceedToMenu() {
+            const tableNumber = document.getElementById('tableSelect').value;
+            if (!tableNumber) {
+                alert('Please select a table number to proceed');
+                return;
+            }
+            // Store table number in localStorage
+            localStorage.setItem('selectedTable', tableNumber);
+            // Redirect to menu page
+            window.location.href = `main.html?table=${tableNumber}`;
+        }
+
+        // If table number is in URL, set it and proceed
+        if (tableFromURL) {
+            const tableSelect = document.getElementById('tableSelect');
+            tableSelect.value = tableFromURL;
+            // Small delay to ensure the value is set
+            setTimeout(proceedToMenu, 100);
+        }
+    </script>
 </body>
 </html> 
