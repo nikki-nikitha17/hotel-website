@@ -68,6 +68,13 @@ function getTableNumberFromURL() {
 document.addEventListener('DOMContentLoaded', function() {
     // Check if we're on main.html
     if (window.location.pathname.includes('main.html')) {
+        // First check URL parameter
+        const urlTableNumber = getTableNumberFromURL();
+        if (urlTableNumber) {
+            localStorage.setItem('selectedTable', urlTableNumber);
+        }
+        
+        // Then get table number from localStorage
         const tableNumber = localStorage.getItem('selectedTable');
         if (!tableNumber) {
             // No table selected, redirect to index.html
@@ -78,6 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Display selected table number in the header
         const nav = document.querySelector('.nav-container');
         if (nav) {
+            const existingTableInfo = nav.querySelector('.table-info');
+            if (existingTableInfo) {
+                existingTableInfo.remove();
+            }
             const tableInfo = document.createElement('div');
             tableInfo.className = 'table-info';
             tableInfo.innerHTML = `<span>Table ${tableNumber}</span>`;
@@ -629,4 +640,20 @@ function updateOrderStatus(orderId, status) {
  currentStatus.textContent = status;
  }
  }
+}
+
+function closeCheckout() {
+    const checkoutModal = document.getElementById('checkoutModal');
+    if (checkoutModal) {
+        checkoutModal.classList.remove('show');
+        // Reset form
+        const form = document.getElementById('paymentForm');
+        if (form) {
+            form.reset();
+        }
+        // Reset payment UI
+        document.getElementById('upi-payment-details').style.display = 'none';
+        document.getElementById('payment-status').style.display = 'none';
+        document.querySelectorAll('.payment-btn').forEach(btn => btn.disabled = false);
+    }
 }
