@@ -66,6 +66,37 @@ function getTableNumberFromURL() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on main.html
+    if (window.location.pathname.includes('main.html')) {
+        const tableNumber = localStorage.getItem('selectedTable');
+        if (!tableNumber) {
+            // No table selected, redirect to index.html
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        // Display selected table number in the header
+        const nav = document.querySelector('.nav-container');
+        if (nav) {
+            const tableInfo = document.createElement('div');
+            tableInfo.className = 'table-info';
+            tableInfo.innerHTML = `<span>Table ${tableNumber}</span>`;
+            nav.appendChild(tableInfo);
+        }
+    }
+    
+    // If we're on index.html, handle table selection
+    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+        const tableButtons = document.querySelectorAll('.table-button');
+        tableButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tableNumber = this.getAttribute('data-table');
+                localStorage.setItem('selectedTable', tableNumber);
+                window.location.href = 'main.html';
+            });
+        });
+    }
+
     // Initialize carousel
     const carousel = document.querySelector('.carousel-container');
     if (carousel) {
@@ -311,8 +342,33 @@ function removeFromCart(itemId) {
  updateCart();
 }
 
+// Close all modals function
+function closeAllModals() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.classList.remove('show');
+        // Reset forms if they exist
+        const form = modal.querySelector('form');
+        if (form) {
+            form.reset();
+        }
+        // Reset specific modal elements
+        if (modal.id === 'orderStatusModal') {
+            const feedback = document.getElementById('feedback');
+            if (feedback) feedback.value = '';
+            currentRating = 0;
+            updateRatingStars();
+        }
+        if (modal.id === 'checkoutModal') {
+            document.getElementById('upi-payment-details').style.display = 'none';
+            document.getElementById('payment-status').style.display = 'none';
+        }
+    });
+}
+
 // Modal Functions
 function openCart() {
+    closeAllModals();
     const cartModal = document.getElementById('cartModal');
     if (cartModal) {
         cartModal.classList.add('show');
@@ -331,7 +387,7 @@ function checkout() {
         alert('Your cart is empty!');
         return;
     }
-    closeCart();
+    closeAllModals();
     
     const checkoutModal = document.getElementById('checkoutModal');
     if (checkoutModal) {
@@ -351,69 +407,31 @@ function checkout() {
             tableSelect.value = tableNumber;
             tableFormGroup.style.display = 'none';
         }
-        
-        // Reset other form fields
-        document.getElementById('customerName').value = '';
-        document.getElementById('customerPhone').value = '';
-        document.getElementById('customerEmail').value = '';
-        document.getElementById('specialInstructions').value = '';
-    }
-}
-
-function closeCheckout() {
-    const checkoutModal = document.getElementById('checkoutModal');
-    if (checkoutModal) {
-        checkoutModal.classList.remove('show');
-        document.getElementById('paymentForm').reset();
-        document.getElementById('upi-payment-details').style.display = 'none';
-        document.getElementById('payment-status').style.display = 'none';
     }
 }
 
 function openOrderStatus() {
+    closeAllModals();
     const orderStatusModal = document.getElementById('orderStatusModal');
     if (orderStatusModal) {
         orderStatusModal.classList.add('show');
     }
 }
 
-function closeOrderStatus() {
-    const orderStatusModal = document.getElementById('orderStatusModal');
-    if (orderStatusModal) {
-        orderStatusModal.classList.remove('show');
-        const feedback = document.getElementById('feedback');
-        if (feedback) feedback.value = '';
-        currentRating = 0;
-        updateRatingStars();
-    }
-}
-
 function openAdminLogin() {
+    closeAllModals();
     const adminLoginModal = document.getElementById('adminLoginModal');
     if (adminLoginModal) {
         adminLoginModal.classList.add('show');
     }
 }
 
-function closeAdminLogin() {
-    const adminLoginModal = document.getElementById('adminLoginModal');
-    if (adminLoginModal) {
-        adminLoginModal.classList.remove('show');
-    }
-}
-
 function openAdminPanel() {
+    closeAllModals();
     const adminPanelModal = document.getElementById('adminPanelModal');
     if (adminPanelModal) {
         adminPanelModal.classList.add('show');
         updateAdminPanel();
-    }
-}
-
-function closeAdminPanel() {
-    const adminPanelModal = document.getElementById('adminPanelModal');
-    if (adminPanelModal) {
-        adminPanelModal.classList.remove('show');
     }
 }
 
